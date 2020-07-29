@@ -14,16 +14,18 @@ module Spree
 
           ship_address = order&.ship_address&.address1&.downcase
 
-          valid_address = true
-          preferred_address.split(" ").each do |element|
-            unless ship_address.include? element.downcase
-              valid_address = false
-              break
+          if ship_address.blank?
+            eligibility_errors.add(:base, 'no tiene dirección configurada')
+          else
+            valid_address = true
+            preferred_address.split(" ").each do |element|
+              unless ship_address.include? element.downcase
+                valid_address = false
+                break
+              end
             end
+            eligibility_errors.add(:base, 'su dirección no tiene promoción') unless valid_address
           end
-
-          eligibility_errors.add(:base, 'no tiene dirección configurada') unless ship_address.present?
-          eligibility_errors.add(:base, 'su dirección no tiene promoción') unless valid_address
 
           eligibility_errors.empty?
         end
