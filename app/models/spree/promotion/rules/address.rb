@@ -14,11 +14,11 @@ module Spree
 
           ship_address = order&.ship_address&.address1&.downcase
 
-          if ship_address.blank?
+          if ship_address.blank? || preferred_address.split(' ').blank?
             eligibility_errors.add(:base, 'no tiene dirección configurada')
           else
             valid_address = true
-            preferred_address.split(" ").each do |element|
+            preferred_address.split(' ').each do |element|
               unless ship_address.include? element.downcase
                 valid_address = false
                 break
