@@ -16,5 +16,9 @@ module SpreePromotionAddress
     end
 
     config.to_prepare(&method(:activate).to_proc)
+    config.after_initialize do
+      Rails.application.config.spree.promotions.rules << Spree::Promotion::Rules::Address
+      Rails.application.config.spree.promotions.actions << Spree::Promotion::Actions::AdjustmentShipping
+    end
   end
 end
